@@ -99,7 +99,14 @@ class EstadosController extends Controller
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
         
                 ];         
-            }else if($model->load($request->post()) && $model->save()){
+            }else if($model->load($request->post())){
+                $ok = Estados::verificarSeExiste($model->nome);
+                if($ok==true){
+                    Yii::$app->session->setFlash('warning','Já existe um estado com o nome: '.$model->nome);
+                    return $this->redirect(['index']);
+                }
+
+                $model->save();
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
                     'title'=> "Create new Estados",
@@ -123,7 +130,14 @@ class EstadosController extends Controller
             /*
             *   Process for non-ajax request
             */
-            if ($model->load($request->post()) && $model->save()) {
+            if ($model->load($request->post())  ) {
+                $ok = Estados::verificarSeExiste($model->nome);
+                if($ok==true){
+                    Yii::$app->session->setFlash('warning','Já existe um estado com o nome:'.$model->nome);
+                    return $this->redirect(['index']);
+                }
+
+                $model->save();
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
                 return $this->render('create', [

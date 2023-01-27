@@ -77,4 +77,32 @@ class Estados extends \yii\db\ActiveRecord
     {
         return new \app\modules\sistema\query\EstadosQuery(get_called_class());
     }
+
+    public static function verificarSeExiste($nome){
+        $seExist = Estados::find()->where(['nome'=>strtoupper($nome)])->one();
+        if($seExist){
+           return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    public function beforeSave($insert)
+    {
+        if($insert){
+            $this->nome= strtoupper($this->nome);
+            $this->sigla= strtoupper($this->sigla);
+            $this->created_at = date('Y-m-d H:i:s');
+            $this->created_by = Yii::$app->user->id;
+        }else{
+            $this->nome= strtoupper($this->nome);
+            $this->sigla= strtoupper($this->sigla);
+            $this->updated_at = date('Y-m-d H:i:s');
+            $this->updated_by = Yii::$app->user->id;
+        }
+        return parent::beforeSave($insert);
+    }
+
+   
 }

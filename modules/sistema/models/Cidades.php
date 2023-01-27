@@ -86,4 +86,17 @@ class Cidades extends \yii\db\ActiveRecord
     {
         return new \app\modules\sistema\query\CidadesQuery(get_called_class());
     }
+    public function beforeSave($insert)
+    {
+        if($insert){
+            $this->nome= strtoupper($this->nome);
+            $this->created_at = date('Y-m-d H:i:s');
+            $this->created_by = Yii::$app->user->id;
+        }else{
+            $this->nome= strtoupper($this->nome);
+            $this->updated_at = date('Y-m-d H:i:s');
+            $this->updated_by = Yii::$app->user->id;
+        }
+        return parent::beforeSave($insert);
+    }
 }

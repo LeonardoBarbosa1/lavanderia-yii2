@@ -4,12 +4,15 @@ namespace app\modules\sistema\controllers;
 
 use Yii;
 use app\modules\sistema\models\Cidades;
+use app\modules\sistema\models\Estados;
 use app\modules\sistema\search\CidadesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
+use yii\helpers\VarDumper;
+use yii\helpers\ArrayHelper;
 
 /**
  * CidadesController implements the CRUD actions for Cidades model.
@@ -37,14 +40,18 @@ class CidadesController extends Controller
      * @return mixed
      */
     public function actionIndex()
-    {    
+    { 
+        
+        
+        
         $searchModel = new CidadesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+        
     }
 
 
@@ -82,7 +89,13 @@ class CidadesController extends Controller
     public function actionCreate()
     {
         $request = Yii::$app->request;
-        $model = new Cidades();  
+        $model = new Cidades(); 
+
+        $estado = Estados::find()->all();
+        $listarEstado = ArrayHelper::map($estado,'id', 'nome');
+        
+        
+    
 
         if($request->isAjax){
             /*
@@ -94,6 +107,7 @@ class CidadesController extends Controller
                     'title'=> "Create new Cidades",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
+                        'listarEstado' => $listarEstado,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
@@ -113,6 +127,7 @@ class CidadesController extends Controller
                     'title'=> "Create new Cidades",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
+                        'listarEstado' => $listarEstado,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
@@ -128,6 +143,7 @@ class CidadesController extends Controller
             } else {
                 return $this->render('create', [
                     'model' => $model,
+                    'listarEstado' => $listarEstado,
                 ]);
             }
         }
@@ -144,7 +160,10 @@ class CidadesController extends Controller
     public function actionUpdate($id)
     {
         $request = Yii::$app->request;
-        $model = $this->findModel($id);       
+        $model = $this->findModel($id);    
+        
+        $estado = Estados::find()->all();
+        $listarEstado = ArrayHelper::map($estado,'id', 'nome');
 
         if($request->isAjax){
             /*
@@ -156,6 +175,7 @@ class CidadesController extends Controller
                     'title'=> "Update Cidades #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
+                        'listarEstado' => $listarEstado,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
@@ -175,6 +195,7 @@ class CidadesController extends Controller
                     'title'=> "Update Cidades #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
+                        'listarEstado' => $listarEstado,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
@@ -189,6 +210,7 @@ class CidadesController extends Controller
             } else {
                 return $this->render('update', [
                     'model' => $model,
+                    'listarEstado' => $listarEstado,
                 ]);
             }
         }

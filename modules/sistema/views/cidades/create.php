@@ -10,5 +10,6 @@ use yii\helpers\Html;
 <div class="cidades-create">
     <?= $this->render('_form', [
         'model' => $model,
+        'listarEstado' => $listarEstado,
     ]) ?>
 </div>
