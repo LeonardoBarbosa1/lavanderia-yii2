@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\sistema\models\Clientes */
@@ -10,7 +11,7 @@ use yii\widgets\ActiveForm;
 <div class="clientes-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
+    
     <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'cpf_cnpj')->textInput(['maxlength' => true]) ?>
@@ -19,17 +20,19 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'endereco')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'created_by')->textInput() ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
-
-    <?= $form->field($model, 'updated_by')->textInput() ?>
 
     <?= $form->field($model, 'bairro')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'id_cidades')->textInput() ?>
+    <!-- //$form->field($model, 'id_cidades')->textInput() ?>-->
+    <?= $form->field($model, 'id_cidades')->widget(Select2::classname(), [
+                        'data' => $listarCidade,
+                        'options' => ['placeholder' => Yii::t('app', 'Selecione uma Cidade') . '...'],
+                        'pluginOptions' => [
+                            'allowClear' => true,
+                        ],
+                    ])
+   ?>
+
 
     <?= $form->field($model, 'status')->checkbox() ?>
 

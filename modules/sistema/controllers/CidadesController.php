@@ -45,11 +45,15 @@ class CidadesController extends Controller
         
         
         $searchModel = new CidadesSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,);
+        
+
+       
         
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+           
         ]);
         
     }

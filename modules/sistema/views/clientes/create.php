@@ -10,5 +10,6 @@ use yii\helpers\Html;
 <div class="clientes-create">
     <?= $this->render('_form', [
         'model' => $model,
+        'listarCidade' => $listarCidade,
     ]) ?>
 </div>

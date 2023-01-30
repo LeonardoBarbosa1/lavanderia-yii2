@@ -2,6 +2,7 @@
 
 namespace app\modules\sistema\controllers;
 
+use app\modules\sistema\models\Cidades;
 use Yii;
 use app\modules\sistema\models\Clientes;
 use app\modules\sistema\search\ClientesSearch;
@@ -10,6 +11,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
+use yii\helpers\VarDumper;
+use yii\helpers\ArrayHelper;
 
 /**
  * ClientesController implements the CRUD actions for Clientes model.
@@ -84,6 +87,9 @@ class ClientesController extends Controller
         $request = Yii::$app->request;
         $model = new Clientes();  
 
+        $cidade = Cidades::find()->all();
+        $listarCidade = ArrayHelper::map($cidade,'id', 'nome');
+
         if($request->isAjax){
             /*
             *   Process for ajax request
@@ -94,12 +100,22 @@ class ClientesController extends Controller
                     'title'=> "Create new Clientes",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
+                        'listarCidade' => $listarCidade,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
         
                 ];         
-            }else if($model->load($request->post()) && $model->save()){
+            }else if($model->load($request->post()) ){
+
+                $ok = Clientes::verificarSeExiste($model->cpf_cnpj);
+                if($ok==true){
+                    Yii::$app->session->setFlash('warning','Já existe um Cliente com o nome: '.$model->nome);
+                    return $this->redirect(['index']);
+                }
+
+                $model->save();
+
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
                     'title'=> "Create new Clientes",
@@ -113,6 +129,7 @@ class ClientesController extends Controller
                     'title'=> "Create new Clientes",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
+                        'listarCidade' => $listarCidade,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
@@ -123,11 +140,20 @@ class ClientesController extends Controller
             /*
             *   Process for non-ajax request
             */
-            if ($model->load($request->post()) && $model->save()) {
+            if ($model->load($request->post()) ) {
+
+                $ok = Clientes::verificarSeExiste($model->cpf_cnpj);
+                if($ok==true){
+                    Yii::$app->session->setFlash('warning','Já existe um Cliente com o nome: '.$model->nome);
+                    return $this->redirect(['index']);
+                }
+
+                $model->save();
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
                 return $this->render('create', [
                     'model' => $model,
+                    'listarCidade' => $listarCidade,
                 ]);
             }
         }
@@ -144,7 +170,10 @@ class ClientesController extends Controller
     public function actionUpdate($id)
     {
         $request = Yii::$app->request;
-        $model = $this->findModel($id);       
+        $model = $this->findModel($id); 
+        
+        $cidade = Cidades::find()->all();
+        $listarCidade = ArrayHelper::map($cidade,'id', 'nome');
 
         if($request->isAjax){
             /*
@@ -156,16 +185,22 @@ class ClientesController extends Controller
                     'title'=> "Update Clientes #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
+                        'listarCidade' => $listarCidade,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
                 ];         
-            }else if($model->load($request->post()) && $model->save()){
+            }else if($model->load($request->post()) && $model->save() ){
+
+               
+
+
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
                     'title'=> "Clientes #".$id,
                     'content'=>$this->renderAjax('view', [
                         'model' => $model,
+                        'listarCidade' => $listarCidade,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                             Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
@@ -175,6 +210,7 @@ class ClientesController extends Controller
                     'title'=> "Update Clientes #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
+                        'listarCidade' => $listarCidade,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
@@ -184,11 +220,16 @@ class ClientesController extends Controller
             /*
             *   Process for non-ajax request
             */
-            if ($model->load($request->post()) && $model->save()) {
+            if ($model->load($request->post()) &&  $model->save()) {
+
+
+                
+
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
                 return $this->render('update', [
                     'model' => $model,
+                    'listarCidade' => $listarCidade,
                 ]);
             }
         }

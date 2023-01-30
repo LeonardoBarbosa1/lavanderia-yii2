@@ -42,6 +42,7 @@ class Estados extends \yii\db\ActiveRecord
             [['nome'], 'string', 'max' => 100],
             [['sigla'], 'string', 'max' => 2],
         ];
+        
     }
 
     /**

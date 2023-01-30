@@ -68,7 +68,7 @@ class Clientes extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
             'updated_by' => 'Updated By',
             'bairro' => 'Bairro',
-            'id_cidades' => 'Id Cidades',
+            'id_cidades' => 'Cidade',
             'status' => 'Status',
         ];
     }
@@ -96,5 +96,37 @@ class Clientes extends \yii\db\ActiveRecord
     public static function find()
     {
         return new \app\modules\sistema\query\ClientesQuery(get_called_class());
+    }
+
+    public static function verificarSeExiste($cpf_cnpj){
+        $seExist = Clientes::find()->where(['cpf_cnpj'=>strtoupper($cpf_cnpj)])->one();
+        if($seExist){
+           return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    public static function format($mask,$string)
+    {
+    return  vsprintf($mask, str_split($string));
+    }
+
+    public function beforeSave($insert)
+    {
+        if($insert){
+            $this->nome= strtoupper($this->nome);
+            $this->endereco= strtoupper($this->endereco);
+            $this->bairro= strtoupper($this->bairro);
+            $this->created_at = date('Y-m-d H:i:s');
+            $this->created_by = Yii::$app->user->id;
+        }else{
+            $this->nome= strtoupper($this->nome);
+            $this->endereco= strtoupper($this->endereco);
+            $this->updated_at = date('Y-m-d H:i:s');
+            $this->updated_by = Yii::$app->user->id;
+        }
+        return parent::beforeSave($insert);
     }
 }

@@ -57,11 +57,11 @@ class Cidades extends \yii\db\ActiveRecord
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',
             'updated_by' => 'Updated By',
-            'id_estados' => 'Id Estados',
+            'id_estados' => 'Estado',
             'status' => 'Status',
         ];
     }
-
+   
     /**
      * @return \yii\db\ActiveQuery
      */

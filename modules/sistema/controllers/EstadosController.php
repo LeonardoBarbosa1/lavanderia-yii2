@@ -138,6 +138,8 @@ class EstadosController extends Controller
                 }
 
                 $model->save();
+
+                
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
                 return $this->render('create', [
