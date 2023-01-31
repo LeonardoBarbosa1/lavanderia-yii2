@@ -108,10 +108,7 @@ class Clientes extends \yii\db\ActiveRecord
 
     }
 
-    public static function format($mask,$string)
-    {
-    return  vsprintf($mask, str_split($string));
-    }
+    
 
     public function beforeSave($insert)
     {

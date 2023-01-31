@@ -14,6 +14,7 @@ use yii\helpers\Html;
 use yii\helpers\VarDumper;
 use yii\helpers\ArrayHelper;
 
+
 /**
  * CidadesController implements the CRUD actions for Cidades model.
  */
@@ -26,7 +27,7 @@ class CidadesController extends Controller
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::classname(),
                 'actions' => [
                     'delete' => ['post'],
                     'bulk-delete' => ['post'],

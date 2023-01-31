@@ -14,6 +14,7 @@ use yii\helpers\Html;
 use yii\helpers\VarDumper;
 use yii\helpers\ArrayHelper;
 
+
 /**
  * ClientesController implements the CRUD actions for Clientes model.
  */
@@ -190,10 +191,16 @@ class ClientesController extends Controller
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
                 ];         
-            }else if($model->load($request->post()) && $model->save() ){
+            }else if($model->load($request->post())  ){
 
                
+                $ok = Clientes::verificarSeExiste($model->cpf_cnpj);
+                if($ok==true){
+                    Yii::$app->session->setFlash('warning','Já existe um Cliente com o nome: '.$model->nome);
+                    return $this->redirect(['index']);
+                }
 
+                $model->save();
 
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
@@ -220,9 +227,15 @@ class ClientesController extends Controller
             /*
             *   Process for non-ajax request
             */
-            if ($model->load($request->post()) &&  $model->save()) {
+            if ($model->load($request->post()) ) {
 
+                $ok = Clientes::verificarSeExiste($model->cpf_cnpj);
+                if($ok==true){
+                    Yii::$app->session->setFlash('warning','Já existe um Cliente com o nome: '.$model->nome);
+                    return $this->redirect(['index']);
+                }
 
+                $model->save();
                 
 
                 return $this->redirect(['view', 'id' => $model->id]);
