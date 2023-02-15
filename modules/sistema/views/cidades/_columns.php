@@ -18,6 +18,7 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'id_estados',
+        'value'=>'estados.nome'
     ],
     [
         'class'=>'\kartik\grid\DataColumn',

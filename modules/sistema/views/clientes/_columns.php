@@ -39,6 +39,7 @@ return [
      [
          'class'=>'\kartik\grid\DataColumn',
          'attribute'=>'id_cidades',
+         'value'=>'cidades.nome'
      ],
      [
          'class'=>'\kartik\grid\DataColumn',

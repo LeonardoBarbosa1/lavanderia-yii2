@@ -12,6 +12,7 @@ use app\modules\sistema\models\Cidades;
  */
 class CidadesSearch extends Cidades
 {
+    public $_nome_estados;
     /**
      * @inheritdoc
      */
@@ -19,7 +20,7 @@ class CidadesSearch extends Cidades
     {
         return [
             [['id', 'created_by', 'updated_by', 'id_estados'], 'integer'],
-            [['nome', 'created_at', 'updated_at'], 'safe'],
+            [['nome', 'created_at', 'updated_at','_nome_estados'], 'safe'],
             [['status'], 'boolean'],
         ];
     }
@@ -66,7 +67,8 @@ class CidadesSearch extends Cidades
             'status' => $this->status,
         ]);
 
-        $query->andFilterWhere(['like', 'nome', $this->nome]);
+        $query->andFilterWhere(['like', 'nome', $this->nome])
+        ->andFilterWhere(['like', 'estado.nome', $this->_nome_estados]);
 
         return $dataProvider;
     }
